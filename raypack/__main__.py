@@ -1,5 +1,5 @@
 """
-Create a package for AWS Glue, Ray.io tasks. 
+Raypack will create a package for AWS Glue, Ray.io tasks.
 
 If you are only using included-by-default packages, public packages, pure python packages, 
 binary wheel packages, you don't have to do this.
@@ -14,17 +14,20 @@ This tool aims to do that and be pipx installable and work on any OS
 Some code generate with ChatGPT (OpenAI)
 """
 import os
-import zipfile
+import shutil
 import sys
+import zipfile
+
 
 def get_site_packages_dir():
+    """Find site-packages regardless of virtual environment or OS."""
     # First, check if we're in a virtual environment
-    if hasattr(sys, 'real_prefix') or (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix):
+    if hasattr(sys, "real_prefix") or (hasattr(sys, "base_prefix") and sys.base_prefix != sys.prefix):
         # We're in a virtual environment, check the known paths where site-packages could be
         for path in sys.path:
-            if 'site-packages' in path:
+            if "site-packages" in path:
                 return path
-    
+
     # If no virtual environment is detected, we'll try to infer the site-packages path from the environment variable
     poetry_venv_path = os.getenv("POETRY_VIRTUALENVS_PATH")
     if poetry_venv_path:
@@ -35,10 +38,41 @@ def get_site_packages_dir():
     # Return None if we can't infer the location
     return None
 
-def package_for_ray(temp_dir_name, files_to_include, output_zip_name):
+
+def copy_tree(src, dst, symlinks=False, ignore=None):
+    """
+    Recursively copy a directory tree from src to dst.
+
+    Parameters:
+    - src (str): Source directory.
+    - dst (str): Destination directory.
+    - symlinks (bool): Whether to copy symbolic links as symbolic links.
+    - ignore (callable): A callable function that returns a list of directory and file names to ignore.
+    """
+    if not os.path.exists(dst):
+        os.makedirs(dst)
+        shutil.copystat(src, dst)
+
+    for item in os.listdir(src):
+        source_item = os.path.join(src, item)
+        destination_item = os.path.join(dst, item)
+
+        if os.path.isdir(source_item):
+            copy_tree(source_item, destination_item, symlinks, ignore)
+        else:
+            if (
+                not os.path.exists(destination_item)
+                or os.stat(source_item).st_mtime - os.stat(destination_item).st_mtime > 1
+            ):
+                shutil.copy2(source_item, destination_item)
+
+
+def package_for_ray(temp_dir_name: str, files_to_include: list[str], output_zip_name: str) -> None:
+    """Package files for AWS Glue, Ray.io tasks."""
     if not os.path.exists(temp_dir_name):
         os.makedirs(temp_dir_name)
 
+    # Why we doing this? Seems like an extra copy.
     # Copy files to the temporary directory
     for file in files_to_include:
         if os.path.basename(file) != "__MACOSX":
@@ -50,8 +84,8 @@ def package_for_ray(temp_dir_name, files_to_include, output_zip_name):
                 os.replace(file, destination_path)
 
     # Zip the directory
-    with zipfile.ZipFile(output_zip_name, 'w') as zipf:
-        for foldername, subfolders, filenames in os.walk(temp_dir_name):
+    with zipfile.ZipFile(output_zip_name, "w") as zipf:
+        for foldername, _subfolders, filenames in os.walk(temp_dir_name):
             for filename in filenames:
                 if "__MACOSX" not in filename:
                     filepath = os.path.join(foldername, filename)
