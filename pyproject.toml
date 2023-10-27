@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "raypack"
-version = "0.1.0"
+version = "0.2.18"
 description = "Unofficial AWS Glue Ray.io packaging tool. Pure python or cross platform."
 authors = ["Matthew Martin <matthewdeanmartin@gmail.com>"]
 keywords = ["awsglue", "ray.io", "aws glue"]
@@ -37,6 +37,11 @@ documentation ="https://github.com/matthewdeanmartin/raypack"
 [tool.poetry.dependencies]
 python = ">=3.10"
 boto3 = ">=1.28.71"
+toml ="*"
+
+[tool.poetry.scripts]
+raypack = 'raypack.__main__:main'
+
 
 [tool.poetry.dev-dependencies]
 mdformat = ">=0.7.17"
@@ -47,6 +52,7 @@ pre-commit = ">=3.5.0"
 mypy = ">=1.6.1"
 pytest-cov = "*"
 ruff = "*"
+types-toml = "*"
 
 [tool.black]
 line-length = 120
@@ -147,7 +153,8 @@ version = "literal: pyproject.toml: project.version"
 path = "raypack/__init__.py"
 output_file = "CHANGELOG.${config:format}"
 
-[mypy]
+[tool.mypy]
 warn_return_any = true
 warn_unused_configs = true
 strict = true
+ignore_missing_imports = true

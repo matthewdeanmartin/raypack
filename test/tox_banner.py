@@ -1,3 +1,3 @@
 import platform
 
-print("{} {}; raypack {}".format(platform.python_implementation(), platform.python_version()))
+print(f"{platform.python_implementation()} {platform.python_version()}")

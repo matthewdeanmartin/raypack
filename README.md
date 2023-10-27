@@ -54,16 +54,28 @@ raypack
 ```
 ## Contributing
 
+To install and run tests and linting tools.
 ```bash
 poetry install --with dev
-```
-
-Run all the tests, etc.
-```bash
 make check
 ```
 
+To see if the app can package up other apps
+```bash
+poetry build
+# exist poetry shell so that pipx can install with the right base python
+exit 
+pipx install /e/github/raypack/dist/raypack-0.1.0-py3-none-any.whl
+```
+And then in a different project with a `pyproject.toml` file, run
+
+```bash
+raypack
+```
+
 ## Prior Art
+
+[Random scripts in comments](https://github.com/python-poetry/poetry/issues/1937#issuecomment-983754739)
 
 Similar to PEX or other venv zip tools, which as far as I know are not AWS aware, or they don't include all the
 dependencies, or they are more interested in making the archive file executable or self-extracting.

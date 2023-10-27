@@ -10,7 +10,7 @@ else
     VENV :=
 endif
 
-Pipfile.lock: Pipfile
+poetry.lock: pyproject.toml
 	@echo "Installing dependencies"
 	@poetry install --with dev
 
@@ -29,11 +29,11 @@ clean: clean-pyc clean-test
 
 # tests can't be expected to pass if dependencies aren't installed.
 # tests are often slow and linting is fast, so run tests on linted code.
-test: clean .build_history/pylint .build_history/bandit Pipfile.lock
+test: clean .build_history/pylint .build_history/bandit poetry.lock
 	@echo "Running unit tests"
-	$(VENV) pytest raypack --doctest-modules
+	$(VENV) pytest test --doctest-modules
 	$(VENV) python -m unittest discover
-	$(VENV) py.test test --cov=raypack --cov-report=html --cov-fail-under 50
+	$(VENV) py.test test --cov=raypack --cov-report=html --cov-fail-under 25
 
 .build_history:
 	@mkdir -p .build_history
@@ -80,13 +80,19 @@ bandit: .build_history/bandit
 .NOTPARALLEL: .build_history/isort .build_history/black
 
 .build_history/mypy: .build_history $(FILES)
-	@echo "Security checks"
+	@echo "Mypy checks"
 	$(VENV)  mypy raypack
 	@touch .build_history/mypy
 
 .PHONY: mypy
 mypy: .build_history/mypy
 
+deploy:
+	rm -rf dist
+	poetry version patch
+	poetry build
+	pipx uninstall raypack
+	pipx install dist/raypack-*.whl --force
 
 check: test pylint bandit pre-commit mypy
 

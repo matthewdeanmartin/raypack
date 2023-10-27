@@ -141,3 +141,4 @@ test/test_serialize/data/
 TestResults/
 
 node_modules/
+*.zip
