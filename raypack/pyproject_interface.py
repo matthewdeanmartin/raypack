@@ -25,11 +25,11 @@ def own_package_includes() -> list[str]:
     # Load the pyproject.toml content
     with open("pyproject.toml", encoding="utf-8") as f:
         pyproject_content = toml.load(f)
-    return (
-        pyproject_content["tool"]["poetry"].get("include", [])
-        if "tool" in pyproject_content and "poetry" in pyproject_content["tool"]
-        else []
-    )
+
+    poetry_tool = pyproject_content.get("tool", {}).get("poetry", {})
+    includes = poetry_tool.get("include", [])
+
+    return [includes] if isinstance(includes, str) else includes
 
 
 # Read and override the default configuration from pyproject.toml, if available
