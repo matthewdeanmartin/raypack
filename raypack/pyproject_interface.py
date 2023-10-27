@@ -25,13 +25,11 @@ def own_package_includes() -> list[str]:
     # Load the pyproject.toml content
     with open("pyproject.toml", encoding="utf-8") as f:
         pyproject_content = toml.load(f)
-    # TODO: support PEP 518
-    # https://pip.pypa.io/en/stable/reference/build-system/pyproject-toml/
-    # Check if 'tool.poetry' and 'include' are present
-    includes = []
-    if "tool" in pyproject_content and "poetry" in pyproject_content["tool"]:
-        includes = pyproject_content["tool"]["poetry"].get("include", [])
-    return includes
+    return (
+        pyproject_content["tool"]["poetry"].get("include", [])
+        if "tool" in pyproject_content and "poetry" in pyproject_content["tool"]
+        else []
+    )
 
 
 # Read and override the default configuration from pyproject.toml, if available
@@ -45,6 +43,6 @@ def override_config_from_toml(config: dict[str, Any], toml_file_path: str = "pyp
         raypack_config = data.get("tool", {}).get("raypack", {})
 
         # Override the default CONFIG values with the values from the toml file
-        config.update(raypack_config)
+        config |= raypack_config
     except FileNotFoundError:
         print(f"'{toml_file_path}' not found. Using default configuration.")

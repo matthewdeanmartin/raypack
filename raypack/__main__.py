@@ -34,7 +34,7 @@ def create_filename(name: str, version: str) -> str:
     """Create a filename similar to bdist_wheel name, but not the simpler."""
 
     # Determine the Python version
-    python_version = "py" + str(sys.version_info.major) + "." + str(sys.version_info.minor)
+    python_version = f"py{str(sys.version_info.major)}.{str(sys.version_info.minor)}"
 
     # Determine the operating system
     os_name = platform.system().lower()  # e.g., "windows", "linux", "darwin" for macOS
@@ -49,10 +49,10 @@ def create_filename(name: str, version: str) -> str:
 
 def find_site_packages(start_dir: str = ".virtualenv") -> Optional[str]:
     """Find the site-packages directory in a virtual environment."""
-    for root, dirs, _files in os.walk(start_dir):
-        if "site-packages" in dirs:
-            return os.path.join(root, "site-packages")
-    return None
+    return next(
+        (os.path.join(root, "site-packages") for root, dirs, _files in os.walk(start_dir) if "site-packages" in dirs),
+        None,
+    )
 
 
 def get_site_packages_dir(config: Config) -> str:
