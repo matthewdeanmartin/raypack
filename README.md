@@ -13,8 +13,6 @@ in Glue runtime images.
 So you have build on a machine that matches the AWS runtime OS (Fedora-like), create a virtual directory,
 and then zip it up and upload it to s3.
 
-This tool aims to do that and be pipx installable and work on any OS
-
 Some code generate with ChatGPT (OpenAI)
 
 raypack is not supported by Amazon, AWS, nor Anyscale, Inc the makers of ray.io.
@@ -32,26 +30,37 @@ pipx install raypack
 
 ## Capabilities
 
+- Calls poetry to create a virtualenv without dev dependencies
+- TODO: support pip, pipenv to create virtualenv.
 - Finds site-packages
-- Zips files
-- Skips cruft.
-- Uploads to s3
-- No dependencies on shell or subprocess (yet)
+- Zips virtualenv and zips own package
+- TODO: support single file modules, eg. mymodule.py
+- Skips cruft
+- Run as few subprocesses as possible
 - config using pyproject.toml or CLI args
-
-## Not Supported
-
-- Calling pip, poetry, pipenv to create virtualenv.
+- TODO: Uploads to s3
+- pipx installable
+- works on any OS as well as is possible (can't handle linux binaries on windows for example)
 
 ## Usage
+
+```bash
+raypack
+```
 
 ```bash
 python -m raypack
 ```
 
-```bash
-raypack
+Configuration. If none specified, defaults are as below.
+```toml
+[tool.raypack]
+exclude_packaging_cruft = true
+outer_folder_name = "venv"
+source_venv = ".venv"
+venv_tool = "poetry"
 ```
+
 ## Contributing
 
 To install and run tests and linting tools.
@@ -79,6 +88,8 @@ raypack
 
 Similar to PEX or other venv zip tools, which as far as I know are not AWS aware, or they don't include all the
 dependencies, or they are more interested in making the archive file executable or self-extracting.
+
+AWS Lambdas also have to go through a similar ad hoc zip process.
 
 ## Documentation
 

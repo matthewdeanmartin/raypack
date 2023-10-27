@@ -35,7 +35,7 @@ documentation ="https://github.com/matthewdeanmartin/raypack"
 "Change Log" = "https://github.com/matthewdeanmartin/raypack/blob/main/CHANGES.md"
 
 [tool.poetry.dependencies]
-python = ">=3.10"
+python = ">=3.9"
 boto3 = ">=1.28.71"
 toml ="*"
 
@@ -53,6 +53,7 @@ mypy = ">=1.6.1"
 pytest-cov = "*"
 ruff = "*"
 types-toml = "*"
+tox = "*"
 
 [tool.black]
 line-length = 120
