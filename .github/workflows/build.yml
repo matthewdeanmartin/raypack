@@ -17,7 +17,7 @@ jobs:
           pip install poetry && pip install pipx
 
       - name: Install Dependencies
-        run: poetry install --with dev
+        run: python -m poetry install --with dev
       - name: Install global dependencies
         run: |
           pipx install isort && pipx install black && pipx install bandit && pipx install pylint && \
