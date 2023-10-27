@@ -44,7 +44,7 @@ def create_filename(name: str, version: str) -> str:
 
     os_bitness = f"{os_name}{bitness}"
 
-    return f"{name}-{version}-{python_version}-none-{os_bitness}.zip"
+    return f"{name}-{version}-{python_version}-{os_name}-{os_bitness}.zip"
 
 
 def find_site_packages(start_dir: str = ".virtualenv") -> Optional[str]:
@@ -120,7 +120,7 @@ def run_with_config(config: Config, output_zip_name: Optional[str] = None) -> No
     with zipfile.ZipFile(output_zip_name, "w") as zipf:
         count = zipup_virtualenv(config, count, exclusions, outer_folder_name, venv_path, zipf)
 
-        zipup_own_module(config, includes, outer_folder_name, zipf)
+        count += zipup_own_module(config, includes, outer_folder_name, zipf)
     if count == 0:
         raise TypeError("No files were added to the zip file. Check the path to site-packages.")
 

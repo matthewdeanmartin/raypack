@@ -28,6 +28,8 @@ def own_package_includes() -> list[str]:
     # TODO: support PEP 518
     # https://pip.pypa.io/en/stable/reference/build-system/pyproject-toml/
     # Check if 'tool.poetry' and 'include' are present
+
+    # TODO: Does not handle excludes
     includes = []
     if "tool" in pyproject_content and "poetry" in pyproject_content["tool"]:
         includes = pyproject_content["tool"]["poetry"].get("include", [])

@@ -10,6 +10,7 @@ CONFIG_INFO = {
     "source_venv": ".venv",
     # TODO: support pip as well
     "venv_tool": "poetry",
+    "deps_are_pure_python": False,
 }
 
 

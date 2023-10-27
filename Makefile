@@ -16,9 +16,9 @@ poetry.lock: pyproject.toml
 
 clean-pyc:
 	@echo "Removing compiled files"
-	@find . -name '*.pyc' -exec rm -f {} + || true
-	@find . -name '*.pyo' -exec rm -f {} + || true
-	@find . -name '__pycache__' -exec rm -fr {} + || true
+#	@find . -name '*.pyc' -exec rm -f {} + || true
+#	@find . -name '*.pyo' -exec rm -f {} + || true
+#	@find . -name '__pycache__' -exec rm -fr {} + || true
 
 clean-test:
 	@echo "Removing coverage data"
