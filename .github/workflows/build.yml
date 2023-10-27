@@ -11,7 +11,7 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-          cache: 'poetry' # caching poetry dependencies
+          # cache: 'poetry' # this is a command?
       - name: Install poetry and pipx
         run: |
           pip install poetry && pip install pipx
