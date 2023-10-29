@@ -1,7 +1,10 @@
 """All pyproject.toml wrangling."""
-from typing import Any
+import logging
+from typing import Any, cast
 
 import toml
+
+logger = logging.getLogger(__name__)
 
 
 def get_project_info_from_toml(toml_file_path: str = "pyproject.toml") -> tuple[str, str]:
@@ -25,13 +28,11 @@ def own_package_includes() -> list[str]:
     # Load the pyproject.toml content
     with open("pyproject.toml", encoding="utf-8") as f:
         pyproject_content = toml.load(f)
-    # TODO: support PEP 518
-    # https://pip.pypa.io/en/stable/reference/build-system/pyproject-toml/
-    # Check if 'tool.poetry' and 'include' are present
-    includes = []
-    if "tool" in pyproject_content and "poetry" in pyproject_content["tool"]:
-        includes = pyproject_content["tool"]["poetry"].get("include", [])
-    return includes
+
+    poetry_tool = pyproject_content.get("tool", {}).get("poetry", {})
+    includes = poetry_tool.get("include", [])
+
+    return cast(list[str], [includes] if isinstance(includes, str) else includes)
 
 
 # Read and override the default configuration from pyproject.toml, if available
@@ -45,6 +46,6 @@ def override_config_from_toml(config: dict[str, Any], toml_file_path: str = "pyp
         raypack_config = data.get("tool", {}).get("raypack", {})
 
         # Override the default CONFIG values with the values from the toml file
-        config.update(raypack_config)
+        config |= raypack_config
     except FileNotFoundError:
         print(f"'{toml_file_path}' not found. Using default configuration.")

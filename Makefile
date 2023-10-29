@@ -16,9 +16,9 @@ poetry.lock: pyproject.toml
 
 clean-pyc:
 	@echo "Removing compiled files"
-	@find . -name '*.pyc' -exec rm -f {} + || true
-	@find . -name '*.pyo' -exec rm -f {} + || true
-	@find . -name '__pycache__' -exec rm -fr {} + || true
+#	@find . -name '*.pyc' -exec rm -f {} + || true
+#	@find . -name '*.pyo' -exec rm -f {} + || true
+#	@find . -name '__pycache__' -exec rm -fr {} + || true
 
 clean-test:
 	@echo "Removing coverage data"
@@ -48,7 +48,7 @@ isort: .build_history/isort
 
 .build_history/black: .build_history .build_history/isort $(FILES)
 	@echo "Formatting code"
-	$(VENV) black . --exclude .virtualenv
+	$(VENV) black raypack test docs --exclude .virtualenv --exclude .tox  --exclude .venv
 	@touch .build_history/black
 
 .PHONY: black

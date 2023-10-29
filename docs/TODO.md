@@ -2,11 +2,12 @@
 
 Everything!
 
-- unit tests
-- moto tests
-- s3 upload
-- toml config
-- CLI args
+- unit tests - 25% done
+- moto tests - TODO
+- s3 upload - TODO
+- toml config - mostly done
+- CLI args - TODO
 - testing with actual AWS Glue
-- gitlab actions
-- tox
+- gitlab actions - mostly done
+- tox - done?
+- try out https://github.com/gruns/icecream

@@ -1,9 +1,12 @@
 """
 Possibly no longer needed. I was trying to get the OS/architecture name for the zip file.
 """
+import logging
 from typing import Any
 
 from setuptools.dist import Distribution
+
+logger = logging.getLogger(__name__)
 
 
 def wheel_name(**kwargs: Any) -> str:
