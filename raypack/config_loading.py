@@ -21,6 +21,8 @@ CONFIG_INFO = {
 class Config:
     """Configuration for raypack."""
 
+    upload_to_s3: bool = False
+    s3_bucket_name: str = "example"
     exclude_packaging_cruft: bool = True
     outer_folder_name: str = "venv"
     source_venv: str = ".venv"

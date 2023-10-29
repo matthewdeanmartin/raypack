@@ -1,8 +1,16 @@
 import toml
 from unittest.mock import mock_open
-from raypack.pyproject_interface import get_project_info_from_toml
+from raypack.pyproject_interface import get_project_info_from_toml, current_pyproject_toml
 
 MOCK_TOML_DATA = "[tool.poetry]\nname = 'test_project'\nversion = '0.1.0'"
+
+
+def setup_function():
+    """
+    Avoid the `(a)lru_cache` causing tests with identical parameters to interfere
+    with one another.
+    """
+    current_pyproject_toml.cache_clear()
 
 
 def test_get_project_info_from_toml(monkeypatch):

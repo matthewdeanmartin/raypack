@@ -18,29 +18,19 @@ def test_create_venv_success():
 
         # Then:
         # Verify subprocess.run calls
+
         expected_calls = [
             call(
-                shlex.split("poetry config virtualenvs.create true --local"),
+                shlex.split(command),
                 capture_output=True,
                 text=True,
-                check=True,
+                check=False,
                 shell=False,
-            ),
-            call(
-                shlex.split("poetry config virtualenvs.in-project true --local"),
-                capture_output=True,
-                text=True,
-                check=True,
-                shell=False,
-            ),
-            call(shlex.split("poetry install --no-dev"), capture_output=True, text=True, check=True, shell=False),
+            )
+            for command in raypack.poetry_interface.COMMANDS
         ]
         mock_run.assert_has_calls(expected_calls, any_order=False)
 
         # Verify logger.debug calls
-        expected_log_calls = [
-            call("Command: poetry config virtualenvs.create true --local"),
-            call("Command: poetry config virtualenvs.in-project true --local"),
-            call("Command: poetry install --no-dev"),
-        ]
+        expected_log_calls = [call(f"Command: {command}") for command in raypack.poetry_interface.COMMANDS]
         mock_logger.debug.assert_has_calls(expected_log_calls, any_order=False)

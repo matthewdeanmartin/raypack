@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "raypack"
-version = "0.2.23"
+version = "0.3.0"
 description = "Unofficial AWS Glue Ray.io packaging tool. Pure python or cross platform."
 authors = ["Matthew Martin <matthewdeanmartin@gmail.com>"]
 keywords = ["awsglue", "ray.io", "aws glue"]

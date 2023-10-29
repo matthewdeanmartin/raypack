@@ -61,6 +61,16 @@ source_venv = ".venv"
 venv_tool = "poetry"
 ```
 
+## How it works
+
+1. Gather info from pyproject.toml or CLI args, but not both.
+2. Create a local .venv and .whl using poetry.
+3. Create a new zip file with an extra top level folder.
+4. Find the site-packages folder and copy to a new zip
+5. Find the module contents in .whl and copy to a new zip
+6. Upload to s3
+7. Use s3 py modules `"--s3-py-modules", "s3://s3bucket/pythonPackage.zip"`
+
 ## Contributing
 
 To install and run tests and linting tools.
@@ -85,6 +95,8 @@ raypack
 ## Prior Art
 
 [Random scripts in comments](https://github.com/python-poetry/poetry/issues/1937#issuecomment-983754739)
+
+[Some make file script](https://github.com/bhavintandel/py-packager)
 
 Similar to PEX or other venv zip tools, which as far as I know are not AWS aware, or they don't include all the
 dependencies, or they are more interested in making the archive file executable or self-extracting.

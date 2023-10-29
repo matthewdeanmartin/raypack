@@ -13,9 +13,10 @@ import sys
 import zipfile
 from typing import Optional
 
+from raypack.aws_interface import upload_to_s3
 from raypack.config_loading import Config
 from raypack.poetry_interface import create_venv
-from raypack.pyproject_interface import get_project_info_from_toml, own_package_includes
+from raypack.pyproject_interface import get_project_info_from_toml
 
 logger = logging.getLogger(__name__)
 
@@ -43,6 +44,17 @@ def find_site_packages(start_dir: str = ".virtualenv") -> Optional[str]:
         (os.path.join(root, "site-packages") for root, dirs, _files in os.walk(start_dir) if "site-packages" in dirs),
         None,
     )
+
+
+def find_single_whl_in_dist(dist_folder: str = "/dist/") -> str:
+    """Find the wheel"""
+    # List all .whl files in the dist_folder
+    whl_files = [f for f in os.listdir(dist_folder) if f.endswith(".whl")]
+
+    # Check if there's exactly one .whl file
+    if len(whl_files) == 1:
+        return os.path.join(dist_folder, whl_files[0])
+    raise TypeError(f"Expected exactly one .whl file in {dist_folder}, found {len(whl_files)}.")
 
 
 def get_site_packages_dir(config: Config) -> str:
@@ -86,7 +98,7 @@ def run_with_config(config: Config, output_zip_name: Optional[str] = None) -> No
     venv_path = get_site_packages_dir(Config())
     logger.info(f"Packaging site-packages from {venv_path}")
 
-    includes = own_package_includes()
+    # includes = own_package_includes()
 
     # Zip the directory
     count = 0
@@ -112,7 +124,9 @@ def run_with_config(config: Config, output_zip_name: Optional[str] = None) -> No
         if count == 0:
             logger.warning("No files were added to the zip file from virtual env")
 
-        own_count = zipup_own_module(config, includes, outer_folder_name, zipf)
+        # own_count = zipup_own_module(config, includes, outer_folder_name, zipf)
+        whl_file = find_single_whl_in_dist()
+        own_count = zipup_own_module_from_wheel(whl_file, outer_folder_name, zipf)
         if own_count == 0:
             logger.warning("No files were added to the zip file from own module")
         total_count = count + own_count
@@ -120,7 +134,12 @@ def run_with_config(config: Config, output_zip_name: Optional[str] = None) -> No
         raise TypeError("No files were added to the zip file. Check the path to site-packages.")
 
     print(f"Packaged files saved as {output_zip_name}")
-    print(f"TODO: upload to s3 bucket. (aws s3 cp {output_zip_name} s3://my-bucket/)")
+    if config.upload_to_s3 and config.s3_bucket_name == "example":
+        print("Can't upload, need bucket name, configure via pyproject.toml")
+        sys.exit(-1)
+    if config.upload_to_s3:
+        logger.info(f"Uploading {output_zip_name} to {config.s3_bucket_name}")
+        upload_to_s3(output_zip_name, config.s3_bucket_name)
 
 
 def zipup_virtualenv(
@@ -156,8 +175,25 @@ def zipup_virtualenv(
     return count
 
 
+def zipup_own_module_from_wheel(source_whl: str, outer_folder_name: str, new_zip: zipfile.ZipFile) -> int:
+    """Copy a .whl file to a new .zip file, excluding the .dist-info/ folders."""
+    # copy_without_dist_info('source.whl', 'destination.zip')
+    count = 0
+    with zipfile.ZipFile(source_whl, "r") as whl:
+        # Exclude folders whose name ends with .dist-info/
+        dist_info_folders = [info for info in whl.infolist() if info.filename.endswith(".dist-info/")]
+
+        for file_info in whl.infolist():
+            if not any(folder.filename in file_info.filename for folder in dist_info_folders):
+                with whl.open(file_info.filename) as source_file:
+                    filepath = os.path.join(outer_folder_name, file_info.filename)
+                    new_zip.writestr(filepath, source_file.read())
+                    count += 1
+    return count
+
+
 def zipup_own_module(config: Config, includes: list[str], outer_folder_name: str, zipf: zipfile.ZipFile) -> int:
-    """Zip up the project's own code."""
+    """Zip up the project's own code, without using wheel."""
     count = 0
     # User code as governed by pyproject.toml includes
     for file_glob in includes:
