@@ -1,6 +1,9 @@
 """Interface to Poetry."""
+import logging
 import shlex
 import subprocess
+
+logger = logging.getLogger(__name__)
 
 
 def create_venv() -> None:
@@ -12,6 +15,7 @@ def create_venv() -> None:
     ]
 
     for cmd in commands:
+        logger.debug(f"Command: {cmd}")
         result = subprocess.run(shlex.split(cmd), capture_output=True, text=True, check=True, shell=False)
 
         if result.returncode == 0:

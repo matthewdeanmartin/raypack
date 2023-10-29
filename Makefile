@@ -48,7 +48,7 @@ isort: .build_history/isort
 
 .build_history/black: .build_history .build_history/isort $(FILES)
 	@echo "Formatting code"
-	$(VENV) black . --exclude .virtualenv
+	$(VENV) black raypack test docs --exclude .virtualenv --exclude .tox  --exclude .venv
 	@touch .build_history/black
 
 .PHONY: black

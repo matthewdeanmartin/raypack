@@ -1,7 +1,10 @@
 """All pyproject.toml wrangling."""
-from typing import Any
+import logging
+from typing import Any, cast
 
 import toml
+
+logger = logging.getLogger(__name__)
 
 
 def get_project_info_from_toml(toml_file_path: str = "pyproject.toml") -> tuple[str, str]:
@@ -29,7 +32,7 @@ def own_package_includes() -> list[str]:
     poetry_tool = pyproject_content.get("tool", {}).get("poetry", {})
     includes = poetry_tool.get("include", [])
 
-    return [includes] if isinstance(includes, str) else includes
+    return cast(list[str], [includes] if isinstance(includes, str) else includes)
 
 
 # Read and override the default configuration from pyproject.toml, if available
