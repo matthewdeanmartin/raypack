@@ -46,7 +46,7 @@ def find_site_packages(start_dir: str = ".virtualenv") -> Optional[str]:
     )
 
 
-def find_single_whl_in_dist(dist_folder: str = "/dist/") -> str:
+def find_single_whl_in_dist(dist_folder: str = "dist/") -> str:
     """Find the wheel"""
     # List all .whl files in the dist_folder
     whl_files = [f for f in os.listdir(dist_folder) if f.endswith(".whl")]
