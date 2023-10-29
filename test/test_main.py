@@ -5,7 +5,7 @@ import platform
 # A namedtuple to simulate sys.version_info
 from collections import namedtuple
 
-from raypack.__main__ import create_filename
+from raypack.build import create_filename
 
 VersionInfo = namedtuple("VersionInfo", ["major", "minor"])
 

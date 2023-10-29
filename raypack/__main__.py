@@ -16,7 +16,6 @@ Some code generate with ChatGPT (OpenAI)
 import argparse
 import logging
 import logging.config
-
 import sys
 
 from raypack.build import run_with_config
@@ -27,7 +26,7 @@ from raypack.pyproject_interface import override_config_from_toml
 logger = logging.getLogger(__name__)
 
 
-def main() -> None:
+def main() -> int:
     """Parse args and run the application."""
     parser = argparse.ArgumentParser(description="Raypack will create a package for AWS Glue, Ray.io tasks.")
 
@@ -78,26 +77,26 @@ def main() -> None:
         else CONFIG_INFO["deps_are_pure_python"],
     }
     config = Config.from_dict(config_info)
-    use_args(config, args.verbose)
+
+    # pylint: disable=broad-except,bare-except
+    try:
+        use_args(config, args.verbose)
+        return 0
+    except:
+        if args.verbose:
+            raise
+        return -1
 
 
-def use_args(_config: Config, verbose: bool) -> int:
+def use_args(_config: Config, verbose: bool) -> None:
     """Run the application."""
     if verbose:
         logging_config = configure_logging()
         logging.config.dictConfig(logging_config)
         logger.info("Verbose mode enabled")
-
-    # pylint: disable=broad-except,bare-except
-    try:
-        override_config_from_toml(CONFIG_INFO)
-        final_config = Config.from_dict(CONFIG_INFO)
-        run_with_config(config=final_config)
-        return 0
-    except:
-        if verbose:
-            raise
-        return -1
+    override_config_from_toml(CONFIG_INFO)
+    final_config = Config.from_dict(CONFIG_INFO)
+    run_with_config(config=final_config)
 
 
 if __name__ == "__main__":

@@ -15,10 +15,7 @@ from typing import Optional
 
 from raypack.config_loading import Config
 from raypack.poetry_interface import create_venv
-from raypack.pyproject_interface import (
-    get_project_info_from_toml,
-    own_package_includes,
-)
+from raypack.pyproject_interface import get_project_info_from_toml, own_package_includes
 
 logger = logging.getLogger(__name__)
 
