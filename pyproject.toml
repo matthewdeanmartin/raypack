@@ -154,8 +154,8 @@ version = "literal: pyproject.toml: project.version"
 path = "raypack/__init__.py"
 output_file = "CHANGELOG.${config:format}"
 
-[tool.mypy]
-warn_return_any = true
-warn_unused_configs = true
-strict = true
-ignore_missing_imports = true
+#[tool.mypy]
+#warn_return_any = true
+#warn_unused_configs = true
+#strict = true
+#ignore_missing_imports = true

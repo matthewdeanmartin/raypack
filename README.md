@@ -30,6 +30,7 @@ pipx install raypack
 
 ## Capabilities
 
+- TODO: Warn if not python 3.9 or other glue compatible version
 - Calls poetry to create a virtualenv without dev dependencies
 - TODO: support pip, pipenv to create virtualenv.
 - Finds site-packages
@@ -41,7 +42,10 @@ pipx install raypack
 - TODO: Uploads to s3
 - pipx installable
 - works on any OS as well as is possible (can't handle linux binaries on windows for example)
-
+- Remove packages AWS includes
+  - ray jobs https://docs.aws.amazon.com/glue/latest/dg/edit-script-ray-env-dependencies.html
+  - spark jobs https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-libraries.html
+ 
 ## Usage
 
 ```bash

@@ -181,7 +181,7 @@ def zipup_own_module_from_wheel(source_whl: str, outer_folder_name: str, new_zip
     count = 0
     with zipfile.ZipFile(source_whl, "r") as whl:
         # Exclude folders whose name ends with .dist-info/
-        dist_info_folders = [info for info in whl.infolist() if info.filename.endswith(".dist-info/")]
+        dist_info_folders = [info for info in whl.infolist() if info.filename.endswith(".dist-info")]
 
         for file_info in whl.infolist():
             if not any(folder.filename in file_info.filename for folder in dist_info_folders):
