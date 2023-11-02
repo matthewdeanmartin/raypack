@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 CONFIG_INFO = {
     "exclude_packaging_cruft": True,
     "outer_folder_name": "venv",
-    "source_venv": ".venv",
+    "source_venv": "vendor",
     # TODO: support pip as well
     "venv_tool": "poetry",
     "deps_are_pure_python": False,
@@ -25,7 +25,7 @@ class Config:
     s3_bucket_name: str = "example"
     exclude_packaging_cruft: bool = True
     outer_folder_name: str = "venv"
-    source_venv: str = ".venv"
+    source_venv: str = "vendor"
     venv_tool: str = "poetry"
     deps_are_pure_python: bool = False
 

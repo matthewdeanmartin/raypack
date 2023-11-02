@@ -11,11 +11,12 @@ import os
 import platform
 import sys
 import zipfile
+from pathlib import PurePath
 from typing import Optional
 
+import raypack.poetry_interface as poetry_interface
 from raypack.aws_interface import upload_to_s3
 from raypack.config_loading import Config
-from raypack.poetry_interface import create_venv
 from raypack.pyproject_interface import get_project_info_from_toml
 
 logger = logging.getLogger(__name__)
@@ -61,13 +62,16 @@ def get_site_packages_dir(config: Config) -> str:
     """Find site-packages regardless of virtual environment or OS."""
     venv_name = config.source_venv
     if not os.path.exists(venv_name):
-        create_venv()
+        # will fall back to faking it on non-arm64
+        poetry_interface.create_native_arm64_venv()
     full_path = os.path.abspath(venv_name)
     print(f"Virtual environment found at {full_path}")
 
     site_package_dir = find_site_packages(venv_name)
     if not site_package_dir or not os.path.exists(site_package_dir):
-        raise TypeError("Could not find site-packages directory")
+        logger.warning(f"No site-packages, assuming installed with --target at {full_path}")
+        return full_path
+        # raise TypeError("Could not find site-packages directory")
     return site_package_dir
 
 
@@ -153,15 +157,22 @@ def zipup_virtualenv(
         if config.exclude_packaging_cruft and any(foldername.endswith(folder) for folder in exclusions):
             logger.warning(f"excluding: {foldername}")
             continue
+
         # AWS explicitly asks to remove this.
         if foldername.endswith("dist-info"):
+            # remove dist-info
             continue
 
         for filename in filenames:
+            skip_this = False
+
+            # check again for dist-info
+            path_parts = PurePath(filename).parts
+            if any(part.endswith(".dist-info") for part in path_parts):
+                skip_this = True
             is_packaging_cruft = (
                 filename.endswith(".pth") or filename.endswith(".virtualenv") or filename == "_virtualenv.py"
             )
-            skip_this = False
             if config.exclude_packaging_cruft and is_packaging_cruft:
                 skip_this = True
             if "__MACOSX" not in filename and not skip_this:
@@ -180,15 +191,14 @@ def zipup_own_module_from_wheel(source_whl: str, outer_folder_name: str, new_zip
     # copy_without_dist_info('source.whl', 'destination.zip')
     count = 0
     with zipfile.ZipFile(source_whl, "r") as whl:
-        # Exclude folders whose name ends with .dist-info/
-        dist_info_folders = [info for info in whl.infolist() if info.filename.endswith(".dist-info")]
-
         for file_info in whl.infolist():
-            if not any(folder.filename in file_info.filename for folder in dist_info_folders):
-                with whl.open(file_info.filename) as source_file:
-                    filepath = os.path.join(outer_folder_name, file_info.filename)
-                    new_zip.writestr(filepath, source_file.read())
-                    count += 1
+            path_parts = PurePath(file_info.filename).parts
+            if any(part.endswith(".dist-info") for part in path_parts):
+                continue
+            with whl.open(file_info.filename) as source_file:
+                filepath = os.path.join(outer_folder_name, file_info.filename)
+                new_zip.writestr(filepath, source_file.read())
+                count += 1
     return count
 
 

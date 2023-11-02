@@ -43,8 +43,9 @@ pipx install raypack
 - pipx installable
 - works on any OS as well as is possible (can't handle linux binaries on windows for example)
 - Remove packages AWS includes
-  - ray jobs https://docs.aws.amazon.com/glue/latest/dg/edit-script-ray-env-dependencies.html
-  - spark jobs https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-libraries.html
+  - [AWS's documentation on packaging ray jobs](https://docs.aws.amazon.com/glue/latest/dg/edit-script-ray-env-dependencies.html) 
+  - [ray's documentation on dependencies](https://docs.ray.io/en/latest/ray-core/handling-dependencies.html.
+  - [AWS's documentation on packaging spark jobs](https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-libraries.html) 
  
 ## Usage
 

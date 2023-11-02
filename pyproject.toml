@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "raypack"
-version = "0.3.1"
+version = "0.3.20"
 description = "Unofficial AWS Glue Ray.io packaging tool. Pure python or cross platform."
 authors = ["Matthew Martin <matthewdeanmartin@gmail.com>"]
 keywords = ["awsglue", "ray.io", "aws glue"]
@@ -35,9 +35,13 @@ documentation ="https://github.com/matthewdeanmartin/raypack"
 "Change Log" = "https://github.com/matthewdeanmartin/raypack/blob/main/CHANGES.md"
 
 [tool.poetry.dependencies]
-python = ">=3.9"
+python = ">=3.9, <4.0"
+# for upload to s3
 boto3 = ">=1.28.71"
+# support older version of python
 toml =">=0.10.2"
+# don't depend on user's system or pipx poetry
+poetry = ">=1.6.1"
 
 [tool.poetry.scripts]
 raypack = 'raypack.__main__:main'
@@ -154,7 +158,9 @@ version = "literal: pyproject.toml: project.version"
 path = "raypack/__init__.py"
 output_file = "CHANGELOG.${config:format}"
 
-#[tool.mypy]
+
+[tool.mypy]
+ignore_missing_imports = true
 #warn_return_any = true
 #warn_unused_configs = true
 #strict = true

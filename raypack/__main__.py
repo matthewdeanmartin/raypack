@@ -41,7 +41,7 @@ def main() -> int:
         "--outer-folder-name", type=str, help="Name of the outer folder. Default is 'venv'.", default="venv"
     )
     parser.add_argument(
-        "--source-venv", type=str, help="Source virtual environment. Default is '.venv'.", default=".venv"
+        "--source-venv", type=str, help="Source virtual environment. Default is 'vendor'.", default="vendor"
     )
     parser.add_argument(
         "--venv-tool",

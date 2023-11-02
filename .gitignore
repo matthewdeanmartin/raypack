@@ -142,3 +142,4 @@ TestResults/
 
 node_modules/
 *.zip
+/requirements-poetry.txt
