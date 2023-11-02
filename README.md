@@ -10,8 +10,7 @@ binary wheel packages, you don't have to do this.
 AWS Glue can't handle anything without a binary wheel or private package repositories, gcc or other build tools are not
 in Glue runtime images.
 
-So you have build on a machine that matches the AWS runtime OS (Fedora-like), create a virtual directory,
-and then zip it up and upload it to s3.
+See below for build options.
 
 Some code generate with ChatGPT (OpenAI)
 
@@ -46,6 +45,17 @@ pipx install raypack
   - [AWS's documentation on packaging ray jobs](https://docs.aws.amazon.com/glue/latest/dg/edit-script-ray-env-dependencies.html) 
   - [ray's documentation on dependencies](https://docs.ray.io/en/latest/ray-core/handling-dependencies.html.
   - [AWS's documentation on packaging spark jobs](https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-libraries.html) 
+
+## Build Options
+
+If your dependencies are all pure python, the packaging will work on any machine.
+
+If your dependencies have any native code:
+
+- An actual arm64 build runner - Best option, will allow compiling native code correctly.
+- Docker e.g. `FROM public.ecr.aws/lambda/python:3.9-arm64` - Second best option, I haven't tried it, not sure if it works on all build runners that are not actually arm64 CPUs.
+- An arm64 machine e.g. mac - Next best option, not sure if it will work.
+- Any machine or an arm64 machine like a mac- Would work in limited situtions, namely when there are precomipiled binaries (wheels) or all packages are pure python.
  
 ## Usage
 
