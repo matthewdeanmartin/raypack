@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "raypack"
-version = "0.3.20"
+version = "0.4.0"
 description = "Unofficial AWS Glue Ray.io packaging tool. Pure python or cross platform."
 authors = ["Matthew Martin <matthewdeanmartin@gmail.com>"]
 keywords = ["awsglue", "ray.io", "aws glue"]
@@ -28,7 +28,7 @@ license = "MIT"
 readme = "README.md"
 repository = "https://github.com/matthewdeanmartin/raypack"
 homepage = "https://github.com/matthewdeanmartin/raypack"
-documentation ="https://github.com/matthewdeanmartin/raypack"
+documentation = "https://github.com/matthewdeanmartin/raypack"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/matthewdeanmartin/raypack/issues"
@@ -39,7 +39,7 @@ python = ">=3.9, <4.0"
 # for upload to s3
 boto3 = ">=1.28.71"
 # support older version of python
-toml =">=0.10.2"
+toml = ">=0.10.2"
 # don't depend on user's system or pipx poetry
 poetry = ">=1.6.1"
 
@@ -51,7 +51,7 @@ raypack = 'raypack.__main__:main'
 mdformat = ">=0.7.17"
 pytest = ">=7.4.3"
 vermin = ">=1.5.2"
-hypothesis = {extras = ["cli"], version = ">=6.88.1"}
+hypothesis = { extras = ["cli"], version = ">=6.88.1" }
 pre-commit = ">=3.5.0"
 mypy = ">=1.6.1"
 pytest-cov = "*"
@@ -111,11 +111,35 @@ use_parentheses = true
 [tool.ruff]
 line-length = 1000
 
-# Enable Pyflakes `E` and `F` codes by default.
-select = ["E", "F"]
+select = [
+    # pycodestyle
+    "E",
+    # Pyflakes
+    "F",
+    # pyupgrade
+    # "UP",
+    # flake8-bugbear
+    "B",
+    # flake8-simplify
+    "SIM",
+    # isort
+    # "I",
+    # bandit
+    "S",
+    # flake8-builtins
+    "A",
+    # flake8 pytest style
+    "PT",
+    # Pylint
+    "PL"
+]
 ignore = [
-    "E722",
-    "E501",
+    "E722", # no bare-except
+    "S603", # subprocess should not use shell (?)
+    "S101", # assert is fine in a test!
+    "PT018", # double asserts sometimes okay
+    "S607", # parial path to executable. thats what PATH is for
+    "PLR0913", # don't use lint for complexity constriants
 ]
 
 # Exclude a variety of commonly ignored directories.

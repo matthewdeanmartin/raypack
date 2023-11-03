@@ -16,14 +16,20 @@ NATIVE_COMMANDS = [
     "poetry build",
 ]
 
+
+def export_to_requirements_txt() -> Any:
+    """Pipe results to text"""
+    with open("requirements-poetry.txt", "w", encoding="utf-8") as out:
+        return subprocess.run(
+            ["poetry", "export", "--without-hashes", "--format=requirements.txt"], stdout=out, check=False
+        )
+
+
 NONNATIVE_COMMANDS = [
     "poetry build",
     # this is your only option for non-arm64
     # "poetry export --without-hashes --format=requirements.txt > requirements-poetry.txt",
-    lambda: subprocess.run(
-        ["poetry", "export", "--without-hashes", "--format=requirements.txt"],
-        stdout=open("requirements-poetry.txt", "w", encoding="utf-8"),
-    ),
+    export_to_requirements_txt,
     "pip install -r requirements-poetry.txt --target vendor --upgrade --platform=linux_arm64 --only-binary=:all:",
 ]
 

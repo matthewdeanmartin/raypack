@@ -14,7 +14,7 @@ import zipfile
 from pathlib import PurePath
 from typing import Optional
 
-import raypack.poetry_interface as poetry_interface
+from raypack import poetry_interface
 from raypack.aws_interface import upload_to_s3
 from raypack.config_loading import Config
 from raypack.pyproject_interface import get_project_info_from_toml
