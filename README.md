@@ -2,12 +2,21 @@
 
 Raypack will create a package for AWS Glue, Ray.io tasks. This automates
 this [documentation page](https://docs.aws.amazon.com/glue/latest/dg/edit-script-ray-env-dependencies.html) that has
-some handwavy descriptions of shell commands. AWS Lambdas also call for a similar type of packaging, but as far as I 
+some hand-wavy descriptions of shell commands. AWS Lambdas also call for a similar type of packaging, but as far as I 
 know it is no sort of standard.
 
-Use this if you have private dependencies, native dependencies, or you want to package your own code as a python
-package. AWS Glue can't handle anything without a binary wheel or private package repositories, gcc or other build tools
-are not in Glue runtime images.
+Problems this solves:
+- Putting pure python into a conforming zip
+  - With a wrapper folder
+  - Without dist-info or OS junk files
+  - Pinned to poetry lock files
+  - With own module code (exactly as specified in poetry section)
+  - With own dependencies (exactly as specified in poetry section)
+  - Warn you if you're doing something wrong
+- Optionally uploading to S3
+- Optionally upload entrypoint script(s) to s3- Not implemented yet!
+- Supports poetry based projects. More to be supported in the future.
+- Attempting to create a Linux Arm64 zip package when your build runner isn't Linux or Arm64 (Error prone!)
 
 See below for build options.
 
@@ -64,26 +73,6 @@ Precompiled Binaries
 
 The last option works by telling pip to just download and unzip the arm64 wheels. If there aren't wheels or if the wheels
 weren't compiled for arm64, then you have to consider finding a different machine or convincing package maintainers to support wheels and more kinds of wheels.
-
-## Capabilities
-
-- TODO: Warn if not python 3.9 or other glue compatible version
-- TODO: create a venv for 3.9 if current venv is not 3.9
-- Calls poetry to create a virtualenv without dev dependencies
-- TODO: support pip, pipenv to create virtualenv.
-- Finds site-packages
-- Zips virtualenv and zips own package
-- TODO: support single file modules, eg. mymodule.py
-- Skips cruft
-- Run as few subprocesses as possible
-- config using pyproject.toml or CLI args
-- TODO: Uploads to s3
-- pipx installable
-- works on any OS as well as is possible (can't handle linux binaries on windows for example)
-- Remove packages AWS includes
-    - [AWS's documentation on packaging ray jobs](https://docs.aws.amazon.com/glue/latest/dg/edit-script-ray-env-dependencies.html)
-    - [ray's documentation on dependencies](https://docs.ray.io/en/latest/ray-core/handling-dependencies.html.
-    - [AWS's documentation on packaging spark jobs](https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-libraries.html)
 
 ## How it works
 
