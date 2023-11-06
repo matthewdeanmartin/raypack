@@ -15,11 +15,23 @@ from pathlib import PurePath
 from typing import Optional
 
 from raypack import poetry_interface
-from raypack.aws_interface import upload_to_s3
 from raypack.config_loading import Config
 from raypack.pyproject_interface import get_project_info_from_toml
 
 logger = logging.getLogger(__name__)
+
+
+def check_for_binary_files(directory: str) -> list[str]:
+    """Check for binary files in a directory."""
+    binary_extensions = {".so", ".pyd", ".dll", ".dylib"}  # Add more extensions as needed
+    binary_files = []
+
+    for root, _dirs, files in os.walk(directory):
+        for filename in files:
+            if any(filename.endswith(ext) for ext in binary_extensions):
+                binary_files.append(os.path.join(root, filename))
+
+    return binary_files
 
 
 def create_filename(name: str, version: str) -> str:
@@ -102,6 +114,15 @@ def run_with_config(config: Config, output_zip_name: Optional[str] = None) -> No
     venv_path = get_site_packages_dir(Config())
     logger.info(f"Packaging site-packages from {venv_path}")
 
+    binaries_in_venv = check_for_binary_files(venv_path)
+    if binaries_in_venv:
+        logger.warning("Binary files found in virtualenv.")
+    if binaries_in_venv and config.deps_are_pure_python:
+        logger.warning("Binary files found in virtualenv, but deps_are_pure_python is true.")
+        logger.warning("You need to be on an ARM64 to safely build binaries")
+        logger.warning("Please set deps_are_pure_python to `false` in pyproject.toml.")
+        sys.exit(-1)
+
     # includes = own_package_includes()
 
     # Zip the directory
@@ -136,14 +157,6 @@ def run_with_config(config: Config, output_zip_name: Optional[str] = None) -> No
         total_count = count + own_count
     if total_count == 0:
         raise TypeError("No files were added to the zip file. Check the path to site-packages.")
-
-    print(f"Packaged files saved as {output_zip_name}")
-    if config.upload_to_s3 and config.s3_bucket_name == "example":
-        print("Can't upload, need bucket name, configure via pyproject.toml")
-        sys.exit(-1)
-    if config.upload_to_s3:
-        logger.info(f"Uploading {output_zip_name} to {config.s3_bucket_name}")
-        upload_to_s3(output_zip_name, config.s3_bucket_name)
 
 
 def zipup_virtualenv(

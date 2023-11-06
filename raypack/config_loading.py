@@ -13,7 +13,7 @@ CONFIG_INFO = {
     "source_venv": "vendor",
     # TODO: support pip as well
     "venv_tool": "poetry",
-    "deps_are_pure_python": False,
+    "deps_are_pure_python": True,
 }
 
 
@@ -27,7 +27,7 @@ class Config:
     outer_folder_name: str = "venv"
     source_venv: str = "vendor"
     venv_tool: str = "poetry"
-    deps_are_pure_python: bool = False
+    deps_are_pure_python: bool = True
 
     @classmethod
     def from_dict(cls, d: dict[str, Any]) -> "Config":

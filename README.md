@@ -103,16 +103,13 @@ make check
 To see if the app can package up other apps
 
 ```bash
-poetry build
-# exist poetry shell so that pipx can install with the right base python
-exit 
-pipx install /e/github/raypack/dist/raypack-0.1.0-py3-none-any.whl
+# builds, installs with pipx
+make deploy
 ```
 
 And then in a different project with a `pyproject.toml` file, run
-
 ```bash
-raypack
+raypack --verbose
 ```
 
 ## Prior Art

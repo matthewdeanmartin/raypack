@@ -24,10 +24,17 @@ Everything!
 - Skips cruft
 - Run as few subprocesses as possible
 - config using pyproject.toml or CLI args
-- TODO: Uploads to s3
+
 - pipx installable
 - works on any OS as well as is possible (can't handle linux binaries on windows for example)
 - Remove packages AWS includes
     - [AWS's documentation on packaging ray jobs](https://docs.aws.amazon.com/glue/latest/dg/edit-script-ray-env-dependencies.html)
     - [ray's documentation on dependencies](https://docs.ray.io/en/latest/ray-core/handling-dependencies.html.
     - [AWS's documentation on packaging spark jobs](https://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-libraries.html)
+
+
+## Deployment
+- Upload zip to s3, e.g. "glue-python-packages"
+- Upload entrypoint script to s3, e.g. "aws-glue-assets-{account_number}-us-east-1"
+- Update job to point to new script (if name is new)
+  - https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/glue/client/update_job.html

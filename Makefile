@@ -64,7 +64,7 @@ pre-commit: .build_history/pre-commit
 
 .build_history/bandit: .build_history $(FILES)
 	@echo "Security checks"
-	$(VENV)  bandit .
+	$(VENV)  bandit raypack -r -c pyproject.toml
 	@touch .build_history/bandit
 
 .PHONY: bandit

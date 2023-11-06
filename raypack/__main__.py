@@ -53,8 +53,8 @@ def main() -> int:
     parser.add_argument(
         "--deps-are-pure-python",
         action="store_true",
-        help="Specify if the dependencies are pure Python. Default is False.",
-        default=False,
+        help="Specify if the dependencies are pure Python. Default is True.",
+        default=True,
     )
 
     # Adding version and verbose options
