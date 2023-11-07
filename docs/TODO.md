@@ -38,3 +38,7 @@ Everything!
 - Upload entrypoint script to s3, e.g. "aws-glue-assets-{account_number}-us-east-1"
 - Update job to point to new script (if name is new)
   - https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/glue/client/update_job.html
+
+## TODO
+- support people who don't use private repos (use only pip/requirement.txt)
+- setup dev environment that matches glue machine (which has specific binary versions)

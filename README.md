@@ -9,6 +9,7 @@ Problems this solves:
 - Putting pure python into a conforming zip
   - With a wrapper folder
   - Without dist-info or OS junk files
+  - Without the modules that AWS automatically includes
   - Pinned to poetry lock files
   - With own module code (exactly as specified in poetry section)
   - With own dependencies (exactly as specified in poetry section)
@@ -53,7 +54,6 @@ source_venv = ".venv"
 venv_tool = "poetry"
 ```
 
-
 ## Build Options
 
 If your dependencies are all pure python, the packaging will work on any machine. However, if your dependencies have any native code:
@@ -91,9 +91,19 @@ On non-arm64 machine
 3. Combine with own code as above
 4. Upload to s3 as above
 
+## Local Development
+When you write a glue script locally, you will reference
+- your own entry script (a .py file)
+- maybe your own module folder(s)
+- anything you pip install from public or private package repositories
+- the packages that AWS includes automatically, which are many pure and binary python repos from pypi, plus PyAmazonCACerts which is not on pypi.
+
+See [requirements_in_glue_...txt](requirements_in_glue_2023_11_7.txt)
+
 ## Contributing
 
-To install and run tests and linting tools.
+See above for how to develop, package and deploy your own glue code. To contribute to raypack, install and 
+run tests and linting tools with poetry and make.
 
 ```bash
 poetry install --with dev

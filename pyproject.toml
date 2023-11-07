@@ -34,7 +34,7 @@ documentation = "https://github.com/matthewdeanmartin/raypack"
 "Change Log" = "https://github.com/matthewdeanmartin/raypack/blob/main/CHANGES.md"
 
 [tool.poetry.dependencies]
-python = ">=3.10, <4.0"
+python = ">=3.9, <4.0"
 # for upload to s3
 boto3 = ">=1.28.71"
 # support older version of python
