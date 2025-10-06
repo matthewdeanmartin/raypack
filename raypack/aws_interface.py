@@ -4,6 +4,7 @@ output_zip_path = "path_to_your_zip_file.zip"
 bucket = "your_bucket_name"
 upload_to_s3(output_zip_path, bucket)
 """
+
 import logging
 from pathlib import Path
 

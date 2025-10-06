@@ -1,6 +1,7 @@
 """
 Keeping logging out of yaml.
 """
+
 from typing import Any
 
 

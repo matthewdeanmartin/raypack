@@ -1,7 +1,7 @@
 """
 Raypack will create a package for AWS Glue, Ray.io tasks.
 
-If you are only using included-by-default packages, public packages, pure python packages, 
+If you are only using included-by-default packages, public packages, pure python packages,
 binary wheel packages, you don't have to do this.
 
 AWS Glue can't handle anything without a binary wheel or private package repositories.
@@ -13,6 +13,7 @@ This tool aims to do that and be pipx installable and work on any OS
 
 Some code generate with ChatGPT (OpenAI)
 """
+
 import argparse
 import logging
 import logging.config
@@ -66,15 +67,17 @@ def main() -> int:
 
     # Use the gathered values
     config_info = {
-        "exclude_packaging_cruft": args.exclude_packaging_cruft
-        if args.exclude_packaging_cruft is not None
-        else CONFIG_INFO["exclude_packaging_cruft"],
+        "exclude_packaging_cruft": (
+            args.exclude_packaging_cruft
+            if args.exclude_packaging_cruft is not None
+            else CONFIG_INFO["exclude_packaging_cruft"]
+        ),
         "outer_folder_name": args.outer_folder_name if args.outer_folder_name else CONFIG_INFO["outer_folder_name"],
         "source_venv": args.source_venv if args.source_venv else CONFIG_INFO["source_venv"],
         "venv_tool": args.venv_tool if args.venv_tool else CONFIG_INFO["venv_tool"],
-        "deps_are_pure_python": args.deps_are_pure_python
-        if args.deps_are_pure_python is not None
-        else CONFIG_INFO["deps_are_pure_python"],
+        "deps_are_pure_python": (
+            args.deps_are_pure_python if args.deps_are_pure_python is not None else CONFIG_INFO["deps_are_pure_python"]
+        ),
     }
     config = Config.from_dict(config_info)
 
