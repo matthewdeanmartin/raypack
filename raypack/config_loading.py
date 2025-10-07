@@ -1,6 +1,7 @@
 """
 All config related code
 """
+
 import logging
 from dataclasses import dataclass
 from typing import Any

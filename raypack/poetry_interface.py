@@ -1,4 +1,5 @@
 """Interface to Poetry."""
+
 import logging
 import os
 import platform
