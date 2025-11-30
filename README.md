@@ -1,5 +1,13 @@
 # raypack
 
+## Archived!
+
+I'm too poor to test this in AWS as AWS Glue is breathtakingly expensive to run.
+
+There are many tools that handle the ad hoc way that AWS expects python packages and several services depend on similar zipping, see https://pypi.org/project/zappa/ for one, and https://pypi.org/project/lambda-packager/
+
+## Description
+
 Raypack will create a package for AWS Glue, Ray.io tasks. This automates
 this [documentation page](https://docs.aws.amazon.com/glue/latest/dg/edit-script-ray-env-dependencies.html) that has
 some hand-wavy descriptions of shell commands. AWS Lambdas also call for a similar type of packaging, but as far as I 
