@@ -1,12 +1,11 @@
 name: tox
 on:
-  workflow_run:
-    workflows: ["Build and Test"]
-    types:
-      - completed
+  push:
+    branches: ["main"]
+  pull_request:
 
 permissions:
-  contents: read # to fetch code (actions/checkout)
+  contents: read
 jobs:
   tox:
     name: ${{ matrix.os }} / ${{ matrix.python-version }}
@@ -19,6 +18,8 @@ jobs:
         python-version: ["3.9", "3.10", "3.11", "3.12" ]
     steps:
       - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
       - name: Using Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:

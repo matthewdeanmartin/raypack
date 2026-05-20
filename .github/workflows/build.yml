@@ -2,12 +2,17 @@ name: Build and Test
 
 on: [ push ]
 
+
+permissions:
+  contents: read
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
