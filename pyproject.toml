@@ -202,4 +202,6 @@ ignore_missing_imports = true
 #ignore_missing_imports = true
 
 [tool.uv]
+
+[tool.uv.pip]
 universal = true
