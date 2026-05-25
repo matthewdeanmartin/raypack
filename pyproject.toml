@@ -200,3 +200,6 @@ ignore_missing_imports = true
 #warn_unused_configs = true
 #strict = true
 #ignore_missing_imports = true
+
+[tool.uv]
+universal = true
