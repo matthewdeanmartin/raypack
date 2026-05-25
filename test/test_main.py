@@ -1,7 +1,6 @@
 import sys
 import platform
 
-
 # A namedtuple to simulate sys.version_info
 from collections import namedtuple
 
