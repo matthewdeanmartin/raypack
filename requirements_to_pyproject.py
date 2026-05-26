@@ -1,4 +1,4 @@
-from tomlkit import document, table, string
+from tomlkit import document, string, table
 
 
 def read_requirements_txt(file_path):

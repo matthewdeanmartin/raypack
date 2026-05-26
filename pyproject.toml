@@ -53,6 +53,7 @@ vermin = ">=1.5.2"
 hypothesis = { extras = ["cli"], version = ">=6.88.1" }
 pre-commit = ">=3.5.0"
 mypy = ">=1.6.1"
+pylint = ">=3.0"
 pytest-cov = "*"
 ruff = ">=0.1.4"
 types-toml = "*"
@@ -200,6 +201,12 @@ ignore_missing_imports = true
 #warn_unused_configs = true
 #strict = true
 #ignore_missing_imports = true
+
+[dependency-groups]
+dev = [
+    "mypy>=1.8",
+    "pylint>=3.0",
+]
 
 [tool.uv]
 

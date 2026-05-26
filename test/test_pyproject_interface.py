@@ -1,6 +1,11 @@
-import toml
 from unittest.mock import mock_open
-from raypack.pyproject_interface import get_project_info_from_toml, current_pyproject_toml
+
+import toml
+
+from raypack.pyproject_interface import (
+    current_pyproject_toml,
+    get_project_info_from_toml,
+)
 
 MOCK_TOML_DATA = "[tool.poetry]\nname = 'test_project'\nversion = '0.1.0'"
 

@@ -75,9 +75,7 @@ def toml_section_exists(toml_file_path: str = "pyproject.toml") -> bool:
 
     # Check if the [tool.raypack] section exists
     raypack_config = data.get("tool", {}).get("raypack", {})
-    if raypack_config:
-        return True
-    return False
+    return bool(raypack_config)
 
 
 # Read and override the default configuration from pyproject.toml, if available
