@@ -106,7 +106,7 @@ When you write a glue script locally, you will reference
 - anything you pip install from public or private package repositories
 - the packages that AWS includes automatically, which are many pure and binary python repos from pypi, plus PyAmazonCACerts which is not on pypi.
 
-See [requirements_in_glue_...txt](requirements_in_glue_2023_11_7.txt)
+See [requirements_in_glue_...txt](https://github.com/matthewdeanmartin/raypack/blob/main/requirements_in_glue_2023_11_7.txt)
 
 ## Contributing
 
@@ -148,3 +148,10 @@ AWS Lambdas also have to go through a similar ad hoc zip process.
 ## Change Log
 
 - 0.1.0 - Idea and reserve package name.
+
+## Project Links
+
+- [GitHub](https://github.com/matthewdeanmartin/raypack)
+- [PyPI](https://pypi.org/project/raypack/)
+- [Bug Tracker](https://github.com/matthewdeanmartin/raypack/issues)
+- [Change Log](https://github.com/matthewdeanmartin/raypack/blob/main/CHANGELOG.md)

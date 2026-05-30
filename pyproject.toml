@@ -31,7 +31,7 @@ documentation = "https://github.com/matthewdeanmartin/raypack"
 
 [tool.poetry.urls]
 "Bug Tracker" = "https://github.com/matthewdeanmartin/raypack/issues"
-"Change Log" = "https://github.com/matthewdeanmartin/raypack/blob/main/CHANGES.md"
+"Change Log" = "https://github.com/matthewdeanmartin/raypack/blob/main/CHANGELOG.md"
 
 [tool.poetry.dependencies]
 python = ">=3.9, <4.0"
